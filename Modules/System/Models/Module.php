@@ -3,11 +3,12 @@
 namespace Modules\System\Models;
 
 use Arr;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Sushi\Sushi;
 
-class Module extends Model
+class Module extends Model implements HasShieldPermissions
 {
     use Sushi;
     public function getRows()
@@ -26,5 +27,15 @@ class Module extends Model
         }
 
         return $data;
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'install',
+            'uninstall',
+            'enable',
+        ];
     }
 }

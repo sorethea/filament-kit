@@ -51,7 +51,7 @@ return [
         'pages' => true,
         'widgets' => true,
         'resources' => true,
-        'custom_permissions' => false,
+        'custom_permissions' => true,
     ],
 
     'generator' => [
@@ -69,7 +69,9 @@ return [
             'AccountWidget',
         ],
 
-        'resources' => [],
+        'resources' => [
+            \Modules\System\Models\Module::class
+        ],
     ],
 
     'register_role_policy' => [
