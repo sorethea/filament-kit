@@ -1,0 +1,13 @@
+{
+    "name": "System",
+    "alias": "system",
+    "description": "System core module",
+    "type": "system",
+    "installed": true,
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\System\\Providers\\SystemServiceProvider"
+    ],
+    "files": []
+}
