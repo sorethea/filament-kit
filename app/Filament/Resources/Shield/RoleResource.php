@@ -25,7 +25,7 @@ class RoleResource extends Resource implements HasShieldPermissions
 
     protected static function getNavigationGroup(): ?string
     {
-        return config('filament-user.group');
+        return config('system.groups.admin');
     }
 
     public static function getPermissionPrefixes(): array
@@ -126,7 +126,7 @@ class RoleResource extends Resource implements HasShieldPermissions
                                     'sm' => 3,
                                     'lg' => 4,
                                 ])
-                                    ->schema(static::getCustomEntitiesPermisssionSchema())
+                                    ->schema(static::getCustomEntitiesPermissionSchema())
                                     ->columns([
                                         'sm' => 3,
                                         'lg' => 4,
@@ -529,7 +529,7 @@ class RoleResource extends Resource implements HasShieldPermissions
         return static::$permissionsCollection->whereNotIn('name', $entitiesPermissions)->pluck('name');
     }
 
-    protected static function getCustomEntitiesPermisssionSchema(): ?array
+    protected static function getCustomEntitiesPermissionSchema(): ?array
     {
         return collect(static::getCustomEntities())->reduce(function ($customEntities, $customPermission) {
             $customEntities[] = Forms\Components\Grid::make()

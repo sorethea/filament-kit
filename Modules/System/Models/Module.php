@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Sushi\Sushi;
 
-class Module extends Model implements HasShieldPermissions
+class Module extends Model
 {
     use Sushi;
+
     public function getRows()
     {
         $modules = \Module::all();
@@ -27,15 +28,5 @@ class Module extends Model implements HasShieldPermissions
         }
 
         return $data;
-    }
-
-    public static function getPermissionPrefixes(): array
-    {
-        return [
-            'view',
-            'install',
-            'uninstall',
-            'enable',
-        ];
     }
 }

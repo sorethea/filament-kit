@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -16,11 +17,13 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use STS\FilamentImpersonate\Impersonate;
 
-class UserResource extends Resource
+class UserResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = User::class;
 
     protected static ?int $navigationSort = 9;
+
+    protected static $permissionsCollection;
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
@@ -41,7 +44,7 @@ class UserResource extends Resource
 
     protected static function getNavigationGroup(): ?string
     {
-        return config('filament-user.group');
+        return config('system.groups.admin');
     }
 
     protected function getTitle(): string
@@ -141,6 +144,18 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
         ];
     }
 }

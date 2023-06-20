@@ -1,5 +1,5 @@
 {
-    "name": "nwidart/system",
+    "name": "sorethea/system",
     "description": "",
     "authors": [
         {
@@ -14,6 +14,9 @@
 
             }
         }
+    },
+    "require": {
+        "bezhansalleh/filament-shield": "2.4.7"
     },
     "autoload": {
         "psr-4": {

@@ -76,7 +76,7 @@ class BusinessPolicy
      */
     public function deleteAny(User $user)
     {
-        return $user->can('delete_any_business');
+        return $user->can('{{ DeleteAny }}');
     }
 
     /**
@@ -99,7 +99,7 @@ class BusinessPolicy
      */
     public function forceDeleteAny(User $user)
     {
-        return $user->can('force_delete_any_business');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -122,7 +122,7 @@ class BusinessPolicy
      */
     public function restoreAny(User $user)
     {
-        return $user->can('restore_any_business');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -134,7 +134,7 @@ class BusinessPolicy
      */
     public function replicate(User $user, Business $business)
     {
-        return $user->can('replicate_business');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -145,7 +145,7 @@ class BusinessPolicy
      */
     public function reorder(User $user)
     {
-        return $user->can('reorder_business');
+        return $user->can('{{ Reorder }}');
     }
 
 }

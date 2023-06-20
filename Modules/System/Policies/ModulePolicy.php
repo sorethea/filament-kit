@@ -30,7 +30,7 @@ class ModulePolicy
      */
     public function view(User $user, Module $module)
     {
-        return $user->can('view_module');
+        return $user->can('{{ View }}');
     }
 
     /**
@@ -41,7 +41,7 @@ class ModulePolicy
      */
     public function create(User $user)
     {
-        return $user->can('create_module');
+        return $user->can('{{ Create }}');
     }
 
     /**
@@ -53,7 +53,7 @@ class ModulePolicy
      */
     public function update(User $user, Module $module)
     {
-        return $user->can('update_module');
+        return $user->can('{{ Update }}');
     }
 
     /**
@@ -65,7 +65,7 @@ class ModulePolicy
      */
     public function delete(User $user, Module $module)
     {
-        return $user->can('delete_module');
+        return $user->can('{{ Delete }}');
     }
 
     /**
@@ -76,7 +76,7 @@ class ModulePolicy
      */
     public function deleteAny(User $user)
     {
-        return $user->can('delete_any_module');
+        return $user->can('{{ DeleteAny }}');
     }
 
     /**
@@ -88,7 +88,7 @@ class ModulePolicy
      */
     public function forceDelete(User $user, Module $module)
     {
-        return $user->can('force_delete_module');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -99,7 +99,7 @@ class ModulePolicy
      */
     public function forceDeleteAny(User $user)
     {
-        return $user->can('force_delete_any_module');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -111,7 +111,7 @@ class ModulePolicy
      */
     public function restore(User $user, Module $module)
     {
-        return $user->can('restore_module');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -122,7 +122,7 @@ class ModulePolicy
      */
     public function restoreAny(User $user)
     {
-        return $user->can('restore_any_module');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -134,7 +134,7 @@ class ModulePolicy
      */
     public function replicate(User $user, Module $module)
     {
-        return $user->can('replicate_module');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -145,7 +145,7 @@ class ModulePolicy
      */
     public function reorder(User $user)
     {
-        return $user->can('reorder_module');
+        return $user->can('{{ Reorder }}');
     }
 
 }

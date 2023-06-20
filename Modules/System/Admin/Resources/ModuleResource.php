@@ -2,23 +2,26 @@
 
 namespace Modules\System\Admin\Resources;
 
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Illuminate\Support\Facades\Artisan;
 use Modules\System\Admin\Resources\ModuleResource\Pages;
 use Modules\System\Admin\Resources\ModuleResource\RelationManagers;
 use Modules\System\Models\Module;
 
-class ModuleResource extends Resource
+class ModuleResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Module::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-puzzle';
+    protected static $permissionsCollection;
+    protected static ?string $navigationIcon = 'heroicon-o-view-grid';
 
     protected static function getNavigationGroup(): ?string
     {
-        return config('filament-user.group');
+        return config('system.groups.system');
     }
 
     public static function form(Form $form): Form
@@ -55,7 +58,7 @@ class ModuleResource extends Resource
                     ->icon('heroicon-o-ban')
                     ->size('lg')
                     ->successNotificationMessage('Module has been disabled!')
-                    ->visible(fn($record)=>$record->enabled && $record->type=='module' && $record->installed),
+                    ->visible(fn($record)=>$record->enabled && $record->type=='module' && $record->installed && auth()->user()->can('manage_system')),
                 Tables\Actions\Action::make('enable')
                     ->color('success')
                     ->action(function ($record){
@@ -66,16 +69,18 @@ class ModuleResource extends Resource
                     ->iconButton()
                     ->icon('heroicon-o-check')
                     ->size('lg')
-                    ->visible(fn($record)=>!$record->enabled && $record->installed && $record->type=='module'),
+                    ->visible(fn($record)=>!$record->enabled && $record->installed && $record->type=='module' && auth()->user()->can('manage_system')),
                 Tables\Actions\Action::make('install')
                     ->color('success')
                     ->action(function ($record){
                         try {
                             $module = \Module::find($record->name);
                             $module->enable();
+                            Artisan::call('optimize:clear');
                             app()->register('Modules\\'.$module->getName()."\\Providers\\InstallerServiceProvider");
                             $module->json()->set('installed',true)->save();
                         }catch (\Exception $exception){
+                            $module->disable();
                             logger($exception->getMessage());
                         }
 
@@ -84,7 +89,7 @@ class ModuleResource extends Resource
                     ->iconButton()
                     ->icon('heroicon-o-download')
                     ->size('lg')
-                    ->visible(fn($record)=>!$record->installed && $record->type=='module'),
+                    ->visible(fn($record)=>!$record->installed && $record->type=='module' && auth()->user()->can('manage_system')),
                 Tables\Actions\Action::make('uninstall')
                     ->color('danger')
                     ->action(function ($record){
@@ -101,7 +106,7 @@ class ModuleResource extends Resource
                     ->iconButton()
                     ->icon('heroicon-o-trash')
                     ->size('lg')
-                    ->visible(fn($record)=>$record->installed && !$record->enabled && $record->type=='module'),
+                    ->visible(fn($record)=>$record->installed && !$record->enabled && $record->type=='module' && auth()->user()->can('manage_system')),
             ])
             ->bulkActions([
                 //Tables\Actions\DeleteBulkAction::make(),
@@ -112,6 +117,13 @@ class ModuleResource extends Resource
     {
         return [
             'index' => Pages\ManageModules::route('/'),
+        ];
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view_any',
         ];
     }
 }

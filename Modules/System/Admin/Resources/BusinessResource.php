@@ -22,7 +22,7 @@ class BusinessResource extends Resource
 
     protected static function getNavigationGroup(): ?string
     {
-        return config('filament-user.group');
+        return config('system.groups.admin');
     }
 
     public static function form(Form $form): Form

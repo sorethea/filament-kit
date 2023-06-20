@@ -18,4 +18,8 @@ class $NAME$ extends Seeder
 
         // $this->call("OthersTableSeeder");
     }
+
+    public function rollback(){
+        Model::unguard();
+    }
 }
