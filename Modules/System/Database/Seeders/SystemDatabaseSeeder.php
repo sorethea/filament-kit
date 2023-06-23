@@ -26,6 +26,11 @@ class SystemDatabaseSeeder extends Seeder
                 'thousand_separator' => ',', 'decimal_separator' => '.', 'created_at' => null, 'updated_at' => null, ],
         ];
         Currency::insert($currencies);
+
+        if(config('system.roles')){
+            foreach (config('system.roles') as $role)
+            Role::findOrCreate($role,Utils::getFilamentAuthGuard());
+        }
         if(config('filament-shield.super_admin.enabled',false)){
             $superAdmin = Role::findOrCreate(config('filament-shield.super_admin.name'),Utils::getFilamentAuthGuard());
             $permissions = config('system.custom_permissions',[]);
@@ -35,6 +40,14 @@ class SystemDatabaseSeeder extends Seeder
                     $superAdmin->givePermissionTo($permission);
                 }
             }
+        }
+    }
+    public function rollback(){
+        Permission::where('name','like','%system')->delete();
+        Currency::truncate();
+        if(config('system.roles.owner')){
+            Role::findByName(config('system.roles.owner'))->delete();
+            Role::findByName(config('system.employee.role'))->delete();
         }
     }
 }

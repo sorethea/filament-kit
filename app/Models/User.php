@@ -7,14 +7,18 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\System\Traits\HasBusiness;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasBusiness;
+
 
     /**
      * The attributes that are mass assignable.
@@ -23,9 +27,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
      */
     protected $fillable = [
         'name',
-        'phone_number',
-        'avatar',
         'email',
+        'username',
         'password',
     ];
 
@@ -61,6 +64,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 
     public function getFilamentName(): string
     {
-        return $this->name;
+        return ($this->first_name&&$this->last_name)?$this->first_name.' '.$this->last_name:$this->name;
     }
 }

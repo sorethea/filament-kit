@@ -57,8 +57,8 @@ class UserResource extends Resource implements HasShieldPermissions
         $rows = [
             Forms\Components\Card::make()->schema([
                 TextInput::make('name')->required()->label(trans('filament-user::user.resource.name')),
-                TextInput::make('email')->email()->required()->label(trans('filament-user::user.resource.email')),
-                TextInput::make('password')->label(trans('filament-user::user.resource.password'))
+                TextInput::make('email')->email()->required()->label(trans('system::user.resource.email')),
+                TextInput::make('password')->label(trans('system::user.resource.password'))
                     ->password()
                     ->hiddenOn('edit')
                     ->maxLength(255)
@@ -73,19 +73,15 @@ class UserResource extends Resource implements HasShieldPermissions
                         }
                     }),
                 TextInput::make('password_confirm')
-                    ->label(trans('system::users.password_confirmation'))
+                    ->label(trans('system::user.resource.password_confirmation'))
                     ->hiddenOn('edit')
                     ->maxLength(255)
                     ->password()
                     ->same('password')
                     ->required(),
-                TextInput::make('phone_number')
-                    ->label(trans('system::users.phone_number'))
-                    ->unique('users','phone_number',fn($record)=>$record)
-                    ->rule('digits_between:9,10'),
-                Forms\Components\FileUpload::make('avatar')
-                    ->directory('avatar')
-                    ->image(),
+//                Forms\Components\FileUpload::make('avatar')
+//                    ->directory('avatar')
+//                    ->image(),
             ])->columns(2)->columnSpan(2),
 
 
@@ -95,7 +91,7 @@ class UserResource extends Resource implements HasShieldPermissions
             $rows[] = Forms\Components\Card::make()->schema([
                 Forms\Components\MultiSelect::make('roles')
                     ->relationship('roles', 'name')
-                    ->label(trans('filament-user::user.resource.roles'))
+                    ->label(trans('system::user.resource.roles')),
             ])->columns(1)->columnSpan(1);
         }
 
@@ -109,10 +105,9 @@ class UserResource extends Resource implements HasShieldPermissions
         $table
             ->columns([
                 TextColumn::make('id')->sortable()->label(trans('filament-user::user.resource.id')),
-                Tables\Columns\ImageColumn::make('avatar')->rounded(),
-                TextColumn::make('name')->sortable()->searchable()->label(trans('filament-user::user.resource.name')),
+//                Tables\Columns\ImageColumn::make('avatar')->rounded(),
+                TextColumn::make('name')->sortable()->searchable()->label(trans('filament-user::user.resource.name'))->default(fn($record)=>$record->getFilamentName()),
                 TextColumn::make('email')->sortable()->searchable()->label(trans('filament-user::user.resource.email')),
-                TextColumn::make('phone_number')->sortable()->searchable()->label(trans('system::users.phone_number')),
                 BooleanColumn::make('email_verified_at')->sortable()->searchable()->label(trans('filament-user::user.resource.email_verified_at')),
                 Tables\Columns\TextColumn::make('created_at')->label(trans('filament-user::user.resource.created_at'))
                     ->dateTime('M j, Y')->sortable(),
